@@ -1,0 +1,6 @@
+bluetoothctl
+scan on
+# Find the Arduino's address and run:
+pair <Arduino_MAC_Address>
+connect <Arduino_MAC_Address>
+trust <Arduino_MAC_Address>
