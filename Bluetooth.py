@@ -1,6 +1,6 @@
 import asyncio
 from bleak import BleakClient
-
+#d8:3a:dd:1a:a8:e4
 # Replace with the Arduino's MAC address
 ARDUINO_MAC_ADDRESS = "XX:XX:XX:XX:XX:XX"
 CHARACTERISTIC_UUID = "2A57"  # Same as on Arduino
