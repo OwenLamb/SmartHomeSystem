@@ -1,22 +1,20 @@
-import bluetooth
+import asyncio
+from bleak import BleakClient
 
-# Bluetooth UUID and address setup
-server_socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-server_socket.bind(("", bluetooth.PORT_ANY))
-server_socket.listen(1)
+# Replace with the Arduino's MAC address
+ARDUINO_MAC_ADDRESS = "XX:XX:XX:XX:XX:XX"
+CHARACTERISTIC_UUID = "2A57"  # Same as on Arduino
 
-print("Waiting for connection...")
-client_socket, address = server_socket.accept()
-print(f"Connected to {address}")
+async def read_data():
+    async with BleakClient(ARDUINO_MAC_ADDRESS) as client:
+        print("Connected to Arduino!")
+        
+        def notification_handler(sender, data):
+            print(f"Received: {data.decode('utf-8')}")
 
-try:
-    while True:
-        data = client_socket.recv(1024)  # Receive up to 1024 bytes
-        if not data:
-            break
-        print(f"Received: {data.decode('utf-8')}")
-except KeyboardInterrupt:
-    print("Stopping server...")
-finally:
-    client_socket.close()
-    server_socket.close()
+        # Start receiving notifications
+        await client.start_notify(CHARACTERISTIC_UUID, notification_handler)
+        await asyncio.sleep(30)  # Keep receiving for 30 seconds
+        await client.stop_notify(CHARACTERISTIC_UUID)
+
+asyncio.run(read_data())
