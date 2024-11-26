@@ -15,12 +15,45 @@ model = OllamaLLM(model="tinyllama")
 prompt = ChatPromptTemplate.from_template(template)
 chain = prompt | model
 
+#--
+def byte_array_to_string(value):
+    # Raw data is hexstring of int values, as a series of bytes, in little endian byte order
+    # values are converted from bytes -> bytearray -> int
+    # e.g., b'\xb8\x08\x00\x00' -> bytearray(b'\xb8\x08\x00\x00') -> 2232
+    value = bytearray(value)
+    value = value.decode('utf-8')
+    return value
+
 #-------------------SETUP Bluetooth-------------
 from bluepy import btle  
 import time
 import wave  # Import wave module to write WAV files
 
 #Use terminal command "sudo hcitool lescan" to find MAC
+# Define a notification handler class
+class MyDelegate(btle.DefaultDelegate):
+    def __init__(self):
+        btle.DefaultDelegate.__init__(self)
+    
+    def handleNotification(self, cHandle, data):
+        # This method gets called whenever a notification is received
+        print("Notification received:", data)
+        dataString = byte_array_to_string(data)
+        print("Data (converted to string):", dataString)
+
+# Set up the BLE device with the delegate
+nano_sense = btle.Peripheral(mac_address)
+nano_sense.setDelegate(MyDelegate())
+
+# Enable notifications for the characteristic
+BlueCHAR = bleService.getCharacteristics(CHARACTERISTIC_UUID)[0]
+nano_sense.writeCharacteristic(BlueCHAR.getHandle() + 1, b'\x01\x00', withResponse=True)
+
+# Loop to wait for notifications
+while True:
+    if nano_sense.waitForNotifications(1.0):
+        continue
+
 mac_address = "92:32:7E:F5:B4:3F"
 SERVICE_UUID = "180F" # These two need configured the same as Arduino
 CHARACTERISTIC_UUID = "2A19"
@@ -60,13 +93,13 @@ GPIO.output(green, True)
 
 
 #-------------------Create needed functions----------------------
-def byte_array_to_string(value):
+#def byte_array_to_string(value):
     # Raw data is hexstring of int values, as a series of bytes, in little endian byte order
     # values are converted from bytes -> bytearray -> int
     # e.g., b'\xb8\x08\x00\x00' -> bytearray(b'\xb8\x08\x00\x00') -> 2232
-    value = bytearray(value)
-    value = value.decode('utf-8')
-    return value
+ #   value = bytearray(value)
+  #  value = value.decode('utf-8')
+   # return value
 
 def WriteAudioFile():
     # Set up WAV file parameters

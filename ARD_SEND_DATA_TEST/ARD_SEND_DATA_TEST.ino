@@ -39,21 +39,21 @@ void loop() {
     while (central.connected()) {
       // Example hardcoded data to simulate SD card contents
       String simulatedData[] = {
+        "111"
         "Data chunk 1",
         "Data chunk 2",
         "Data chunk 3",
         "Data chunk 4",
-        "Data chunk 5",
-        "9999"  // This is a termination signal to indicate the end
+        "102"
       };
       
       // Send data chunks over BLE
-      for (int i = 0; i < 6; i++) {
+      for (int i = 0; i < 5; i++) {
         String dataChunk = simulatedData[i];
         customCharacteristic.writeValue(dataChunk.c_str());  // Send as a C-style string
         Serial.print("Sent data: ");
         Serial.println(dataChunk);
-        // Wait a second between sends
+        delay(1000);// Wait a second between sends
       }
 
       // Break the loop to stop sending data after one cycle
