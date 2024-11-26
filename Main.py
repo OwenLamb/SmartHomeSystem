@@ -126,11 +126,12 @@ def GenerateAI(user_input):
 def main():
     while True:
         BlueCHAR = bleService.getCharacteristics(CHARACTERISTIC_UUID)[0]
-        print("Blue Char: " + BlueCHAR)
+        print("Blue Char: ", BlueCHAR)  # Use a comma to print the object directly
         BlueData = BlueCHAR.read()
-        print("Blue Data: " + BlueData)
-        BlueData = byte_array_to_string(BlueData)
-        print(BlueData)
+        print("Blue Data (raw bytes): ", BlueData)  # Use a comma for raw byte data
+        BlueDataString = byte_array_to_string(BlueData)
+        print("Blue Data (converted to string): " + BlueDataString)  # Proper string concatenation
+
         #GPIO.output(blue, False)
         WriteAudioFile()  # Write the audio data to a WAV file
         #GPIO.output(blue, True)
