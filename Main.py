@@ -93,6 +93,7 @@ def WriteAudioFile():
                 break
             
             # Write the raw audio data to the WAV file
+            print(BlueString)
             wav_file.writeframes(BlueData)
         
         print(f"Audio data saved to {file_name}")
