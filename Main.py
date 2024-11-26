@@ -25,7 +25,7 @@ mac_address = "92:32:7E:F5:B4:3F"
 SERVICE_UUID = "180F" # These two need configured the same as Arduino
 CHARACTERISTIC_UUID = "2A19"
 
-#Sometimes need to turn bluetooth off then on if it crashes here
+#Sometimes need to turn bluetooth off then on if it crashes here idk why
 print("Connecting…")
 nano_sense = btle.Peripheral(mac_address)
  
@@ -87,8 +87,8 @@ def WriteAudioFile():
         # Continuously read data until receiving the termination marker
         while True:
             BlueData = BlueCHAR.read()
-	    BlueString = byte_array_to_string(BlueData)
-	    if BlueString == "03":  # Check for termination marker
+            BlueString = byte_array_to_string(BlueData)
+            if BlueString == "03":  # Check for termination marker
                 print("End of transmission received.")
                 break
             
