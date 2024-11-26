@@ -53,7 +53,7 @@ void loop() {
         customCharacteristic.writeValue(dataChunk.c_str());  // Send as a C-style string
         Serial.print("Sent data: ");
         Serial.println(dataChunk);
-        delay(1000); // Wait a second between sends
+        // Wait a second between sends
       }
 
       // Break the loop to stop sending data after one cycle

@@ -126,7 +126,9 @@ def GenerateAI(user_input):
 def main():
     while True:
         BlueCHAR = bleService.getCharacteristics(CHARACTERISTIC_UUID)[0]
+        print("Blue Char: " + BlueCHAR)
         BlueData = BlueCHAR.read()
+        print("Blue Data: " + BlueData)
         BlueData = byte_array_to_string(BlueData)
         print(BlueData)
         #GPIO.output(blue, False)
