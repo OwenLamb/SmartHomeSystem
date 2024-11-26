@@ -22,19 +22,27 @@ import wave  # Import wave module to write WAV files
 
 #Use terminal command "sudo hcitool lescan" to find MAC
 mac_address = "92:32:7E:F5:B4:3F"
-SERVICE_UUID = "180F" # These two need configured the same as Arduino
-CHARACTERISTIC_UUID = "2A19"
+SERVICE_UUID = "180F"
+CHARACTERISTIC_UUID = "2A19"  # For receiving data
+CONTROL_UUID = "2A1A"          # For sending control commands
 
-#Sometimes need to turn bluetooth off then on if it crashes here
+# Connect to the BLE device
 print("Connecting…")
 nano_sense = btle.Peripheral(mac_address)
- 
+
 print("Discovering Services…")
 _ = nano_sense.services
 bleService = nano_sense.getServiceByUUID(SERVICE_UUID)
- 
+
 print("Discovering Characteristics…")
-_ = bleService.getCharacteristics()
+dataCharacteristic = bleService.getCharacteristics(CHARACTERISTIC_UUID)[0]
+controlCharacteristic = bleService.getCharacteristics(CONTROL_UUID)[0]  # Get control characteristic
+
+# Send the "START" message to the Arduino
+print("Sending START signal to Arduino...")
+controlCharacteristic.write(b"START")
+print("Start signal sent!")
+
 
 #--------------------SETUP Text to Speech------------
 import os
