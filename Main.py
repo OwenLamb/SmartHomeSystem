@@ -88,7 +88,7 @@ def WriteAudioFile():
         while True:
             BlueData = BlueCHAR.read()
             BlueString = byte_array_to_string(BlueData)
-            if BlueString == "03":  # Check for termination marker
+            if BlueString == "9999":  # Check for termination marker
                 print("End of transmission received.")
                 break
             
@@ -128,22 +128,20 @@ def main():
         BlueData = BlueCHAR.read()
         BlueData = byte_array_to_string(BlueData)
         print(BlueData)
-    
-        if BlueData == "01":
-            GPIO.output(blue, False)
-            WriteAudioFile()  # Write the audio data to a WAV file
-            GPIO.output(blue, True)
+        #GPIO.output(blue, False)
+        WriteAudioFile()  # Write the audio data to a WAV file
+        #GPIO.output(blue, True)
             
-            GPIO.output(green, False)
-            Text = SpeechToText()  # Convert the audio file to text
-            GPIO.output(green, True)
+        #GPIO.output(green, False)
+        #Text = SpeechToText()  # Convert the audio file to text
+        #GPIO.output(green, True)
             
-            GPIO.output(red, False)
-            Response = GenerateAI(Text)  # Generate a response using AI
-            GPIO.output(red, True)
+        #GPIO.output(red, False)
+        #Response = GenerateAI(Text)  # Generate a response using AI
+        #GPIO.output(red, True)
         
-            # Use text-to-speech to respond
-            os.system(f'espeak "{Response}"')
+        # Use text-to-speech to respond
+        #os.system(f'espeak "{Response}"')
 
 if __name__ == "__main__":
     main()
