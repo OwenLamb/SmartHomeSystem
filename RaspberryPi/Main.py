@@ -62,8 +62,6 @@ GPIO.output(green, True)
 #-------------------Create needed functions----------------------
 def byte_array_to_string(value):
     # Raw data is hexstring of int values, as a series of bytes, in little endian byte order
-    # values are converted from bytes -> bytearray -> int
-    # e.g., b'\xb8\x08\x00\x00' -> bytearray(b'\xb8\x08\x00\x00') -> 2232
     value = bytearray(value)
     value = value.decode('utf-8')
     return value
@@ -126,26 +124,26 @@ def GenerateAI(user_input):
 def main():
     while True:
         BlueCHAR = bleService.getCharacteristics(CHARACTERISTIC_UUID)[0]
-        print("Blue Char: ", BlueCHAR)  # Use a comma to print the object directly
+        print("Blue Char: ", BlueCHAR)
         BlueData = BlueCHAR.read()
-        print("Blue Data (raw bytes): ", BlueData)  # Use a comma for raw byte data
-        BlueDataString = byte_array_to_string(BlueData)
-        print("Blue Data (converted to string): " + BlueDataString)  # Proper string concatenation
 
-        #GPIO.output(blue, False)
-        WriteAudioFile()  # Write the audio data to a WAV file
-        #GPIO.output(blue, True)
+        #If Bluetooth sends starting bit (3)
+        if(BlueData == 3):
+            GPIO.output(blue, False)
+            WriteAudioFile()  # Write the audio data to a WAV file
+            GPIO.output(blue, True)
             
-        #GPIO.output(green, False)
-        #Text = SpeechToText()  # Convert the audio file to text
-        #GPIO.output(green, True)
+            GPIO.output(green, False)
+            Text = SpeechToText()  # Convert the audio file to text
+            GPIO.output(green, True)
             
-        #GPIO.output(red, False)
-        #Response = GenerateAI(Text)  # Generate a response using AI
-        #GPIO.output(red, True)
+            GPIO.output(red, False)
+            Response = GenerateAI(Text)  # Generate a response using AI
+            GPIO.output(red, True)
         
-        # Use text-to-speech to respond
-        #os.system(f'espeak "{Response}"')
+            # Use text-to-speech to respond
+            os.system(f'espeak "{Response}"')
+        
 
 if __name__ == "__main__":
     main()
