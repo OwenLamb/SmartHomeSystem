@@ -1,0 +1,8 @@
+Setup:
+Install Arduino and STM instructions. Follow wiring diagram in powerpoint.
+
+On the Raspberry Pi:
+Install Ollama and install tinyllama
+Install libraries in main.py
+
+Run all files and follow directions
